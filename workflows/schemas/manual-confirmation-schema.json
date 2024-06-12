@@ -1,0 +1,20 @@
+{
+    "$id": "classpath:/schemas/manual-confirmation-schema.json",
+    "title": "Manual Confirmation Data Input Schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "requestID": {
+        "title": "Request ID",
+        "description": "The unique identifier of the request awaiting manual confirmation.",
+        "type": "string"
+      },
+      "confirmationStatus": {
+        "title": "Confirmation Status",
+        "description": "The status of the manual confirmation, e.g., 'Confirmed' or 'Rejected'.",
+        "type": "string",
+        "enum": ["Confirmed", "Rejected"]
+      }
+    },
+    "required": ["requestID", "confirmationStatus"]
+  }

@@ -1,0 +1,14 @@
+{
+    "$id": "classpath:/schemas/kubernetes-namespace-creation-schema.json",
+    "title": "Kubernetes Namespace Creation Data Input Schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "namespaceName": {
+        "title": "Namespace Name",
+        "description": "The name of the Kubernetes namespace to be created.",
+        "type": "string"
+      }
+    },
+    "required": ["namespaceName"]
+  }
