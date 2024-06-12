@@ -47,9 +47,7 @@ states:
         functionRef:
           refName: finalizeWorkflow
           arguments:
-            completionStatus: .confirmationResult.status
-        actionDataFilter:
-          results: .workflowCompletion
+            message: "${ .confirmationResult.status }" # Example of passing a message argument
     end: true
   - name: Handle Error
     type: operation
