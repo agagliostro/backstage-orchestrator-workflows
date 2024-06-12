@@ -1,0 +1,62 @@
+id: create-kubernetes-namespace
+version: '1.0'
+specVersion: '0.8'
+name: Create Kubernetes Namespace Workflow
+description: Workflow to create a new Kubernetes namespace upon request and wait for confirmation.
+dataInputSchema: schemas/kubernetes-namespace-creation-schema.json
+functions:
+  - name: k8sCreateNamespace
+    operation: specs/actions-kubernetes.json#k8s:createNamespace
+  - name: manualAwaitConfirmation
+    operation: specs/actions-manual.json#manual:awaitConfirmation
+  - name: finalizeWorkflow
+    type: custom
+    operation: sysout
+errors:
+  - name: Error in Operation
+    code: operation.exception
+start: Initiate Namespace Creation
+states:
+  - name: Initiate Namespace Creation
+    type: operation
+    actionMode: sequential
+    actions:
+      - name: Create Namespace Request
+        functionRef:
+          refName: k8sCreateNamespace
+          arguments:
+            namespaceName: .userInput.namespaceName
+        actionDataFilter:
+          toStateData: .namespaceCreationResult
+    transition: Await Namespace Creation Confirmation
+  - name: Await Namespace Creation Confirmation
+    type: operation
+    actions:
+      - name: Wait for User Confirmation
+        functionRef:
+          refName: manualAwaitConfirmation
+          arguments:
+            requestID: .namespaceCreationResult.requestID
+        actionDataFilter:
+          toStateData: .confirmationResult
+    transition: Finalize Workflow
+  - name: Finalize Workflow
+    type: operation
+    actions:
+      - name: Final Step
+        functionRef:
+          refName: finalizeWorkflow
+          arguments:
+            completionStatus: .confirmationResult.status
+        actionDataFilter:
+          results: .workflowCompletion
+    end: true
+  - name: Handle Error
+    type: operation
+    actions:
+      - name: Error Handling Action
+        functionRef:
+          refName: sysout
+          arguments:
+            message: An error occurred during the workflow
+    end: true

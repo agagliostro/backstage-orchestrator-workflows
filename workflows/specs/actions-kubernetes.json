@@ -1,0 +1,54 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Manual Workflow Actions",
+      "description": "Defines manual intervention actions for workflows, such as user confirmations.",
+      "version": "1.0.0"
+    },
+    "paths": {
+      "/manual/awaitConfirmation": {
+        "post": {
+          "operationId": "manual:awaitConfirmation",
+          "description": "Awaits a manual confirmation from a user or external trigger.",
+          "requestBody": {
+            "description": "Input parameters for awaiting manual confirmation.",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "requestID"
+                  ],
+                  "properties": {
+                    "requestID": {
+                      "type": "string",
+                      "description": "The identifier of the creation request awaiting confirmation."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Confirmation received successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "description": "The status of the confirmation, e.g., 'Confirmed' or 'Rejected'."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
